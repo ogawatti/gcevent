@@ -12,8 +12,6 @@ module Google
     attr_reader :auth_provider_x509_cert_url, :client_x509_cert_url
     attr_reader :scope
 
-    # TODO : readonly 対応
-    #  scope = "https://www.googleapis.com/auth/calendar.readonly"
     def initialize(client_id)
       @id = client_id.include?(CLIENT_ID_SUFFIX) ? scan_id(client_id) : client_id
       @auth_uri                    = ACCOUNTS_GOOGLE_COM_BASE_URI + "/o/oauth2/auth"

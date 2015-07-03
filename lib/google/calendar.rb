@@ -1,8 +1,7 @@
-require 'google/api_client'
-require 'hashie'
-
 require 'google/service_account'
 require 'google/calendar/event'
+require 'google/api_client'
+require 'hashie'
 
 module Google
   class SecretKey < Hashie::Mash; end

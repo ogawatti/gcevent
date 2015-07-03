@@ -1,11 +1,10 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'gcevent'
 
 Gem::Specification.new do |spec|
   spec.name          = "gcevent"
-  spec.version       = Gcevent::VERSION
+  spec.version       = "0.0.1"
   spec.authors       = ["ogawatti"]
   spec.email         = ["ogawattim@gmail.com"]
   spec.summary       = %q{A wrapper of Google Calendar Event API.}
@@ -25,4 +24,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.7"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec"
+  spec.add_development_dependency "pry"
 end
