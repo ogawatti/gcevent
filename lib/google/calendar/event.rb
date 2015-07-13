@@ -1,7 +1,6 @@
 require 'hashie'
 require 'active_support'
 require 'active_support/core_ext'
-require 'pry'
 
 module Google
   module Calendar
@@ -147,10 +146,9 @@ module Google
 
       def request(api_method, params={}, body="")
         data = self.class.execute(api_method, params, body)
-        case data
-        when Google::APIClient::Schema::Calendar::V3::Event
+        if data.respond_to?(:to_hash)
           update_attributes(data.to_hash)
-        when NilClass
+        elsif data.nil?
           {}
         else
           raise data.to_s
@@ -160,10 +158,9 @@ module Google
 
       def self.request(api_method, params={}, body="")
         data = execute(api_method, params, body)
-        case data
-        when Google::APIClient::Schema::Calendar::V3::Events
+        if data.respond_to?(:items)
           data_to_events(data.items)
-        when Google::APIClient::Schema::Calendar::V3::Event
+        elsif data.respond_to?(:to_hash)
           data_to_event(data)
         else
           raise data.to_s

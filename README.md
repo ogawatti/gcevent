@@ -1,3 +1,8 @@
+[![Gem Version](https://badge.fury.io/rb/gcevent.svg)](http://badge.fury.io/rb/gcevent)
+[![Build Status](https://travis-ci.org/ogawatti/gcevent.svg?branch=master)](https://travis-ci.org/ogawatti/gcevent)
+[![Coverage Status](https://coveralls.io/repos/ogawatti/gcevent/badge.png?branch=master)](https://coveralls.io/r/ogawatti/gcevent?branch=master)
+[<img src="https://gemnasium.com/ogawatti/gcevent.png" />](https://gemnasium.com/ogawatti/gcevent)
+
 # Gcevent
 
 A wrapper of Google Calendar Event API.
