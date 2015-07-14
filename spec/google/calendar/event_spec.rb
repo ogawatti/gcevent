@@ -3,24 +3,6 @@ require 'pry'
 
 describe Google::Calendar::Event do
 
-  # TODO : 一番下へ
-  def expect_event_to_eq_test_data(event, test_data)
-    test_data.each_key do |key|
-      case key
-      when :creator, :organizer
-       expect(event.send(key).email).to       eq test_data[key][:email]
-        expect(event.send(key).displayName).to eq test_data[key][:displayName]
-        expect(event.send(key).self).to        eq test_data[key][:self] if key == :organizer
-      when :start, :end
-        expect(event.send(key).date).to        eq test_data[key][:date]
-      when :reminders
-        expect(event.send(key).useDefault).to  eq test_data[key][:useDefault]
-      else
-        expect(event.send(key)).to             eq test_data[key]
-      end
-    end
-  end
-
   let(:event_instance_variables) { [ :id, :kind, :etag, :status, :htmlLink, :created, :updated, 
                                      :creator, :organizer, :transparency, :iCalUID, :sequence, :reminders,
                                      :summary, :start, :end ] }
@@ -142,11 +124,11 @@ describe Google::Calendar::Event do
     let(:start_time) { Date.today.beginning_of_week }
     let(:end_time)   { Date.today.end_of_week }
 
-    before do
-      expect_any_instance_of(Google::APIClient).to receive(:execute!).with(client_execute_options) { response }
-    end
-
     describe '.list' do
+      before do
+        expect_any_instance_of(Google::APIClient).to receive(:execute!).with(client_execute_options) { response }
+      end
+
       it 'should be instance of Google::Calendar::Event' do
         events = Google::Calendar::Event.list(start_time, end_time)
         expect(events.size).to eq 1
@@ -154,6 +136,53 @@ describe Google::Calendar::Event do
         expect(event).to be_instance_of Google::Calendar::Event
         expect_event_to_eq_test_data(event, test_data)
       end
+    end
+
+    shared_examples 'Called Event.list and Recieve Start and End' do
+      before { expect(Google::Calendar::Event).to receive(:list).with(start_time, end_time) }
+      it { is_expected.not_to raise_error }
+    end
+
+    describe '.today' do
+      let(:start_time) { Date.today }
+      let(:end_time)   { Date.tomorrow }
+      subject { lambda { Google::Calendar::Event.today } }
+      it_behaves_like 'Called Event.list and Recieve Start and End'
+    end
+
+    describe '.tomorrow' do
+      let(:start_time) { Date.tomorrow }
+      let(:end_time)   { Date.tomorrow.tomorrow }
+      subject { lambda { Google::Calendar::Event.tomorrow } }
+      it_behaves_like 'Called Event.list and Recieve Start and End'
+    end
+
+    describe '.yesterday' do
+      let(:start_time) { Date.yesterday }
+      let(:end_time)   { Date.today }
+      subject { lambda { Google::Calendar::Event.yesterday } }
+      it_behaves_like 'Called Event.list and Recieve Start and End'
+    end
+
+    describe '.this_week' do
+      let(:start_time) { Date.today.beginning_of_week }
+      let(:end_time)   { Date.today.end_of_week }
+      subject { lambda { Google::Calendar::Event.this_week } }
+      it_behaves_like 'Called Event.list and Recieve Start and End'
+    end
+
+    describe '.this_month' do
+      let(:start_time) { Date.today.beginning_of_month }
+      let(:end_time)   { Date.today.end_of_month }
+      subject { lambda { Google::Calendar::Event.this_month } }
+      it_behaves_like 'Called Event.list and Recieve Start and End'
+    end
+
+    describe '.this_year' do
+      let(:start_time) { Date.today.beginning_of_year }
+      let(:end_time)   { Date.today.end_of_year }
+      subject { lambda { Google::Calendar::Event.this_year } }
+      it_behaves_like 'Called Event.list and Recieve Start and End'
     end
   end
 
@@ -175,16 +204,20 @@ describe Google::Calendar::Event do
       expect_any_instance_of(Google::APIClient).to receive(:execute!).with(client_execute_options) { response }
     end
 
-    it 'should be instance of Google::Calendar::Event' do
-      event.insert
-      expect(event).to be_instance_of Google::Calendar::Event
-      expect_event_to_eq_test_data(event, test_data)
+    describe '#insert' do
+      it 'should be instance of Google::Calendar::Event' do
+        event.insert
+        expect(event).to be_instance_of Google::Calendar::Event
+        expect_event_to_eq_test_data(event, test_data)
+      end
     end
 
-    it 'should be instance of Google::Calendar::Event' do
-      event = Google::Calendar::Event.insert(options)
-      expect(event).to be_instance_of Google::Calendar::Event
-      expect_event_to_eq_test_data(event, test_data)
+    describe '.insert' do
+      it 'should be instance of Google::Calendar::Event' do
+        event = Google::Calendar::Event.insert(options)
+        expect(event).to be_instance_of Google::Calendar::Event
+        expect_event_to_eq_test_data(event, test_data)
+      end
     end
   end
 
@@ -242,10 +275,12 @@ describe Google::Calendar::Event do
       expect_any_instance_of(Google::APIClient).to receive(:execute!).with(client_execute_options) { response }
     end
 
-    it 'should be instance of Google::Calendar::Event' do
-      event = Google::Calendar::Event.quickAdd(summary)
-      expect(event).to be_instance_of Google::Calendar::Event
-      expect_event_to_eq_test_data(event, test_data)
+    describe '#quickAdd' do
+      it 'should be instance of Google::Calendar::Event' do
+        event = Google::Calendar::Event.quickAdd(summary)
+        expect(event).to be_instance_of Google::Calendar::Event
+        expect_event_to_eq_test_data(event, test_data)
+      end
     end
   end
 
@@ -267,11 +302,30 @@ describe Google::Calendar::Event do
       expect_any_instance_of(Google::APIClient).to receive(:execute!).with(client_execute_options) { response }
     end
 
-    it 'should be instance of Google::Calendar::Event' do
-      event.update
-      expect(event.summary).to eq summary
-      expect(event).to be_instance_of Google::Calendar::Event
-      expect_event_to_eq_test_data(event, test_data)
+    describe '#update' do
+      it 'should be instance of Google::Calendar::Event' do
+        event.update
+        expect(event.summary).to eq summary
+        expect(event).to be_instance_of Google::Calendar::Event
+        expect_event_to_eq_test_data(event, test_data)
+      end
+    end
+  end
+
+  def expect_event_to_eq_test_data(event, test_data)
+    test_data.each_key do |key|
+      case key
+      when :creator, :organizer
+       expect(event.send(key).email).to       eq test_data[key][:email]
+        expect(event.send(key).displayName).to eq test_data[key][:displayName]
+        expect(event.send(key).self).to        eq test_data[key][:self] if key == :organizer
+      when :start, :end
+        expect(event.send(key).date).to        eq test_data[key][:date]
+      when :reminders
+        expect(event.send(key).useDefault).to  eq test_data[key][:useDefault]
+      else
+        expect(event.send(key)).to             eq test_data[key]
+      end
     end
   end
 end

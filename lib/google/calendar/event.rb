@@ -100,38 +100,38 @@ module Google
       end
 
       def self.today
-        start_time = Date.today.to_time.utc.iso8601
-        end_time   = Date.tomorrow.to_time.utc.iso8601
+        start_time = Date.today
+        end_time   = Date.tomorrow
         list(start_time, end_time)
       end
 
       def self.tomorrow
-        start_time = Date.tomorrow.to_time.utc.iso8601
-        end_time   = Date.tomorrow.tomorrow.to_time.utc.iso8601
+        start_time = Date.tomorrow
+        end_time   = Date.tomorrow.tomorrow
         list(start_time, end_time)
       end
 
       def self.yesterday
-        start_time = Date.yesterday.to_time.utc.iso8601
-        end_time   = Date.today.to_time.utc.iso8601
+        start_time = Date.yesterday
+        end_time   = Date.today
         list(start_time, end_time)
       end
 
       def self.this_week
-        start_time = Date.today.beginning_of_week.to_time.utc.iso8601
-        end_time   = Date.today.end_of_week.to_time.utc.iso8601
+        start_time = Date.today.beginning_of_week
+        end_time   = Date.today.end_of_week
         list(start_time, end_time)
       end
 
       def self.this_month
-        start_time = Date.today.beginning_of_month.to_time.utc.iso8601
-        end_time   = Date.today.end_of_month.to_time.utc.iso8601
+        start_time = Date.today.beginning_of_month
+        end_time   = Date.today.end_of_month
         list(start_time, end_time)
       end
 
       def self.this_year
-        start_time = Date.today.beginning_of_year.to_time.utc.iso8601
-        end_time   = Date.today.end_of_year.to_time.utc.iso8601
+        start_time = Date.today.beginning_of_year
+        end_time   = Date.today.end_of_year
         list(start_time, end_time)
       end
 
@@ -169,7 +169,6 @@ module Google
 
       def self.execute(api_method, params={}, body="")
         response = Calendar.execute(api_method, params, body)
-        raise_error(response) if response.status.to_s !~ /^20\d$/
         response.data
       end
       
@@ -181,12 +180,6 @@ module Google
         events_data.inject([]) do |events, event_data|
           events << data_to_event(event_data)
         end
-      end
-
-      def self.raise_error(response)
-        message = "Not Implemented."
-        message += " [#{response.status}] #{response.body}"
-        raise message
       end
     end
   end
