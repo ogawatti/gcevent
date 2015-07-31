@@ -312,6 +312,15 @@ describe Google::Calendar::Event do
     end
   end
 
+  describe '#num_of_days' do
+    let(:event)      { Google::Calendar::Event.new(options) }
+    let(:options)    { { summary: summary, start: start_date, end: end_date } }
+
+    # num_of_days : today ~ tomorrow
+    subject { event.num_of_days }
+    it { is_expected.to eq 2 }
+  end
+
   def expect_event_to_eq_test_data(event, test_data)
     test_data.each_key do |key|
       case key
