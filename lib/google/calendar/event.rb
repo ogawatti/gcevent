@@ -99,6 +99,12 @@ module Google
         self.to_hash.to_json
       end
 
+      def num_of_days
+        start_date = (self.start.date || self.start.dateTime).to_date
+        end_date   = (self.end.date   || self.end.dateTime  ).to_date
+        (end_date - start_date).to_i + 1
+      end
+
       def self.today
         start_time = Date.today
         end_time   = Date.tomorrow
