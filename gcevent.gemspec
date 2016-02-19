@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = "gcevent"
-  spec.version       = "0.0.1"
+  spec.version       = "0.0.2"
   spec.authors       = ["ogawatti"]
   spec.email         = ["ogawattim@gmail.com"]
   spec.summary       = %q{A wrapper of Google Calendar Event API.}
@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "google-api-client"
+  spec.add_dependency "google-api-client", "0.8.6"
   spec.add_dependency "activesupport"
   spec.add_dependency "hashie"
 
