@@ -8,8 +8,9 @@ describe Google::Calendar do
   before do
     allow(Google::APIClient::KeyUtils).to receive(:load_key) { OpenSSL::PKey::RSA.new }
     allow(File).to receive(:exist?) { true }
+    allow(File).to receive(:read) { { installed: { client_id: client_id } }.to_json }
     allow_any_instance_of(Signet::OAuth2::Client).to receive(:fetch_access_token!) { true }
-    Google::Calendar.client_id = client_id
+    Google::Calendar.client_secret_path = "testpath"
   end
 
   describe '.api' do

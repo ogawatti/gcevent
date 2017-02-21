@@ -34,11 +34,21 @@ describe Google::Calendar::Event do
   let(:end_date)   { { date: Date.tomorrow } }
 
   before do
+    Google::Calendar.id = calendar_id
     allow(Google::APIClient::KeyUtils).to receive(:load_key) { OpenSSL::PKey::RSA.new }
     allow(File).to receive(:exist?) { true }
+    allow(File).to receive(:read) { 
+      {
+        installed: {
+          client_id:                   "100000000000000000000",
+          project_id:                  "test-project-000001",
+          auth_uri:                    "https://accounts.google.com/o/oauth2/auth",
+          token_uri:                   "https://accounts.google.com/o/oauth2/token",
+          auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs"
+        }
+      }.to_json
+    }
     allow_any_instance_of(Signet::OAuth2::Client).to receive(:fetch_access_token!) { true }
-    Google::Calendar.client_id = client_id
-    Google::Calendar.id = calendar_id
     allow(Google::Calendar).to receive(:authorize?) { true }
   end
 

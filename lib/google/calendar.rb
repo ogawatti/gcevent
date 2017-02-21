@@ -8,7 +8,7 @@ module Google
 
   module Calendar
     class << self
-      attr_accessor :id, :client_id
+      attr_accessor :id, :client_secret_path, :client_email
     end
 
     extend self
@@ -40,7 +40,7 @@ module Google
     end
 
     def service_account
-      Google::ServiceAccount.new(client_id)
+      Google::ServiceAccount.new(client_secret_path, client_email)
     end
 
     def signing_key
