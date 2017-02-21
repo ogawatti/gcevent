@@ -30,7 +30,8 @@ Or install it yourself as:
 Google::Calendar.id                  = "Id of a target Google Calendar"
 Google::Calendar.secret_key.path     = "Path of xxx-privatekey.p12"
 Google::Calendar.secret_key.password = "Password"
-Google::Calendar.client_id           = "ID of Client"
+Google::Calendar.client_secret_path  = "Path of client_secret_xxx.json"
+Google::Calendar.client_email        = "Email address of service account"
 ```
 
 ### Event#get
